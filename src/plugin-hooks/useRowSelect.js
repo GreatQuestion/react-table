@@ -15,6 +15,7 @@ actions.resetSelectedRows = 'resetSelectedRows'
 actions.toggleAllRowsSelected = 'toggleAllRowsSelected'
 actions.toggleRowSelected = 'toggleRowSelected'
 actions.toggleAllPageRowsSelected = 'toggleAllPageRowsSelected'
+actions.setSelectedRowIds = 'setSelectedRowIds'
 
 export const useRowSelect = hooks => {
   hooks.getToggleRowSelectedProps = [defaultGetToggleRowSelectedProps]
@@ -174,6 +175,14 @@ function reducer(state, action, previousState, instance) {
       selectedRowIds: newSelectedRowIds,
     }
   }
+  
+  if (action.type === actions.setSelectedRowIds) {
+    const { ids } = action
+    return {
+      ...state,
+      selectedRowIds: ids,
+    }
+  }
 
   if (action.type === actions.toggleAllPageRowsSelected) {
     const { value: setSelected } = action
@@ -297,6 +306,11 @@ function useInstance(instance) {
     [dispatch]
   )
 
+  const setSelectedRowIds = React.useCallback(
+    (ids) => dispatch({ type: actions.setSelectedRowIds, ids }),
+    [dispatch]
+  )
+
   const getInstance = useGetLatest(instance)
 
   const getToggleAllRowsSelectedProps = makePropGetter(
@@ -318,6 +332,7 @@ function useInstance(instance) {
     getToggleAllRowsSelectedProps,
     getToggleAllPageRowsSelectedProps,
     toggleAllPageRowsSelected,
+    setSelectedRowIds
   })
 }
 
